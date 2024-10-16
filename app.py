@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from langchain import HuggingFaceHub
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SimpleSequentialChain
+from langchain.chains import LLMChain, SequentialChain
 
 
 
@@ -30,11 +30,13 @@ script_tmplate = PromptTemplate(
 )
 
 
-title_chain = LLMChain(llm = llm, prompt = title_tmplate, verbose =True)
-script_chain = LLMChain(llm = llm, prompt = script_tmplate, verbose =True)
+title_chain = LLMChain(llm = llm, prompt = title_tmplate, verbose =True, output_key = "title")
+script_chain = LLMChain(llm = llm, prompt = script_tmplate, verbose =True, output_key = "script")
 
-sequential_chain = SimpleSequentialChain(chains = [title_chain, script_chain], verbose = True)
+sequential_chain = SequentialChain(chains = [title_chain, script_chain], input_variables = ['topic'],
+                                   output_variables = ['title', 'script'], verbose = True)
 
 if prompt:
-    response = sequential_chain.run(prompt)
-    st.write(response)
+    response = sequential_chain({'topic': prompt})
+    st.write(response['title'])
+    st.write(response['script'])
