@@ -15,7 +15,7 @@ llm = HuggingFaceHub(
     repo_id = "bigscience/bloom-1b7",
     # repo_id='tiiuae/falcon-7b-instruct',
     # model_kwargs = {'temperature':1e-10},
-    
+    huggingfacehub_api_token = "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"
     
 )
 # prompt templates
